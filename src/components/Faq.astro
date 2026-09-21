@@ -1,0 +1,11 @@
+---
+import type { ToolFaq } from '../data/tools';
+interface Props { faqs: ToolFaq[] }
+const { faqs } = Astro.props;
+---
+{faqs.map((f) => (
+  <details class="faq">
+    <summary>{f.q}</summary>
+    <p>{f.a}</p>
+  </details>
+))}

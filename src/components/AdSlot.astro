@@ -1,0 +1,12 @@
+---
+import { site } from '../config';
+// Reserved ad placements. Nothing renders until a real ad client id is configured.
+// Positions: below-header, after-tool, in-content, sidebar (desktop).
+interface Props { position: 'below-header' | 'after-tool' | 'in-content' | 'sidebar' }
+const { position } = Astro.props;
+---
+{site.ads.enabled && site.ads.client && (
+  <div class={`ad-slot ad-${position}`} data-ad-position={position}>
+    <ins class="adsbygoogle" data-ad-client={site.ads.client}></ins>
+  </div>
+)}

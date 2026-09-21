@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+---
+<Base title={`Terms of Use | ${site.name}`} description={`Terms of use of ${site.name}.`}>
+  <h1>Terms of Use</h1>
+  <p class="lead">Last updated: September 2026</p>
+  <h2>The service</h2>
+  <p>{site.name} provides free online tools "as is", without warranty of any kind. Results are provided for convenience; verify important outputs before relying on them.</p>
+  <h2>Acceptable use</h2>
+  <p>Do not use the service for unlawful purposes or attempt to disrupt it.</p>
+  <h2>Liability</h2>
+  <p>To the maximum extent permitted by law, {site.name} is not liable for damages arising from the use of the tools.</p>
+</Base>

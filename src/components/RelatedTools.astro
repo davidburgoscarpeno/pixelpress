@@ -1,0 +1,12 @@
+---
+import ToolCard from './ToolCard.astro';
+import { bySlug } from '../data/tools';
+interface Props { slugs: string[] }
+const { slugs } = Astro.props;
+const related = slugs.map(bySlug).filter((t) => t && t.implemented);
+---
+{related.length > 0 && (
+  <div class="tool-grid">
+    {related.map((tool) => <ToolCard tool={tool!} />)}
+  </div>
+)}

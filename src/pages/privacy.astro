@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+---
+<Base title={`Privacy Policy | ${site.name}`} description={`Privacy policy of ${site.name}: what data we process and why.`}>
+  <h1>Privacy Policy</h1>
+  <p class="lead">Last updated: September 2026</p>
+  <h2>Data processing</h2>
+  <p>{site.name} tools run entirely in your browser. The content you paste or type into a tool is processed locally on your device and is never sent to our servers.</p>
+  <h2>Analytics</h2>
+  <p>If analytics are enabled on this site, we collect only anonymous, aggregated usage metrics (page views and feature usage) to improve the tools. We do not collect the content you process with the tools.</p>
+  <h2>Cookies</h2>
+  <p>We do not set tracking cookies. See the <a href="/cookies">Cookie Policy</a> for details.</p>
+  <h2>Contact</h2>
+  <p>Questions about privacy? See the <a href="/contact">contact page</a>.</p>
+</Base>

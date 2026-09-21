@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+---
+<Base title={`About | ${site.name}`} description={`What ${site.name} is and why it exists.`}>
+  <h1>About {site.name}</h1>
+  <p class="lead">{site.description}</p>
+  <h2>Why local-first?</h2>
+  <p>Developer tools often handle sensitive data: API responses, tokens, configuration. {site.name} tools run in your browser so that data stays on your device.</p>
+</Base>

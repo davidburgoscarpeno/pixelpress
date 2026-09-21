@@ -1,0 +1,90 @@
+---
+import { site } from '../config';
+import { t } from '../i18n/en';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  ogType?: string;
+  schema?: object | object[];
+  noindex?: boolean;
+}
+const { title, description, canonicalPath = Astro.url.pathname, ogType = 'website', schema, noindex = false } = Astro.props;
+const canonical = new URL(canonicalPath, site.url).href;
+const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+---
+<!doctype html>
+<html lang={site.locale}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  {site.analytics.gscVerification && <meta name="google-site-verification" content={site.analytics.gscVerification} />}
+  {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  {site.analytics.gaId && (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.analytics.gaId}`}></script>
+      <script is:inline define:vars={{ gaId: site.analytics.gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date()); gtag('config', gaId, { anonymize_ip: true });
+      </script>
+    </>
+  )}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="/">
+        <svg class="logo" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/><path d="M8 9h3v6H8zM13 9h3v3h-3z" fill="currentColor"/></svg>
+        {site.name}
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/#tools">{t.nav.tools}</a>
+        <a href="/about">{t.nav.about}</a>
+        <a href="/contact">{t.nav.contact}</a>
+      </nav>
+    </div>
+  </header>
+  <main><div class="container"><slot /></div></main>
+  <footer class="site-footer">
+    <div class="container cols">
+      <div>
+        <h4>{site.name}</h4>
+        <p style="max-width:34ch">{site.tagline}</p>
+      </div>
+      <div>
+        <h4>{t.footer.legal}</h4>
+        <ul>
+          <li><a href="/privacy">{t.footer.privacy}</a></li>
+          <li><a href="/terms">{t.footer.terms}</a></li>
+          <li><a href="/cookies">{t.footer.cookies}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>{site.name}</h4>
+        <ul>
+          <li><a href="/about">{t.footer.about}</a></li>
+          <li><a href="/contact">{t.footer.contact}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container"><p>&copy; {new Date().getFullYear()} {site.name}. {t.footer.rights}</p></div>
+  </footer>
+</body>
+</html>

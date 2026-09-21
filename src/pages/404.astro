@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config';
+import { t } from '../i18n/en';
+---
+<Base title={`404 - ${t.notFound.title} | ${site.name}`} description={t.notFound.body} noindex>
+  <h1>404</h1>
+  <p class="lead">{t.notFound.body}</p>
+  <p><a href="/">Back to {site.name} home</a></p>
+</Base>

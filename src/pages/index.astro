@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolCard from '../components/ToolCard.astro';
+import Search from '../components/Search';
+import AdSlot from '../components/AdSlot.astro';
+import { site } from '../config';
+import { t } from '../i18n/en';
+import { implementedTools, categories } from '../data/tools';
+
+const popular = implementedTools.filter((t) => t.popular);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: `${site.url}/?q={search_term_string}` },
+    'query-input': 'required name=search_term_string'
+  }
+};
+---
+<Base title={`${site.name} - ${site.tagline}`} description={site.description} schema={schema}>
+  <h1>{t.home.heroTitle}</h1>
+  <p class="lead">{t.home.heroSub}</p>
+  <Search client:load placeholder={t.home.searchPlaceholder} />
+  <AdSlot position="below-header" />
+  {popular.length > 0 && (
+    <>
+      <h2>{t.home.popular}</h2>
+      <div class="tool-grid">{popular.map((tool) => <ToolCard tool={tool} />)}</div>
+    </>
+  )}
+  <h2 id="tools">{t.home.allTools}</h2>
+  {categories.map((cat) => {
+    const inCat = implementedTools.filter((t) => t.category === cat);
+    if (inCat.length === 0) return null;
+    return (
+      <>
+        <h3>{cat}</h3>
+        <div class="tool-grid">{inCat.map((tool) => <ToolCard tool={tool} />)}</div>
+      </>
+    );
+  })}
+</Base>

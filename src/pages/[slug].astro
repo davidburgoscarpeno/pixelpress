@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Faq from '../components/Faq.astro';
+import RelatedTools from '../components/RelatedTools.astro';
+import AdSlot from '../components/AdSlot.astro';
+import CompressTool from '../tools/CompressTool';
+import { implementedTools, type Tool } from '../data/tools';
+import { site } from '../config';
+import { t } from '../i18n/en';
+
+export function getStaticPaths() {
+  return implementedTools.map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
+}
+const { tool } = Astro.props as { tool: Tool };
+const schema = [
+  { '@context': 'https://schema.org', '@type': 'WebApplication', name: tool.name,
+    url: new URL(`/${tool.slug}`, site.url).href, applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any', offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD' },
+    description: tool.metaDescription },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+    { '@type': 'ListItem', position: 2, name: tool.name } ] },
+  ...(tool.faqs.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: tool.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : [])
+];
+---
+<Base title={tool.seoTitle} description={tool.metaDescription} schema={schema}>
+  <Breadcrumbs crumbs={[{ name: 'Home', href: '/' }, { name: tool.category }, { name: tool.name }]} />
+  <h1>{tool.name}</h1>
+  <p class="lead">{tool.intro}</p>
+  <CompressTool client:load />
+  <AdSlot position="after-tool" />
+  <h2>{t.tool.howTo}</h2>
+  <ol>{tool.howTo.map((step) => <li>{step}</li>)}</ol>
+  {tool.examples.length > 0 && (<><h2>{t.tool.examples}</h2>
+    {tool.examples.map((ex) => (<div class="example"><div class="lbl">{ex.title}</div>
+      {ex.input && <div><strong>Input:</strong> {ex.input}</div>}
+      {ex.output && <div><strong>Output:</strong> {ex.output}</div>}
+      {ex.note && <div>{ex.note}</div>}</div>))}</>)}
+  {tool.faqs.length > 0 && (<><h2>{t.tool.faq}</h2><Faq faqs={tool.faqs} /></>)}
+  <h2>{t.tool.related}</h2>
+  <RelatedTools slugs={tool.related} />
+</Base>
