@@ -5,6 +5,7 @@ import Faq from '../components/Faq.astro';
 import RelatedTools from '../components/RelatedTools.astro';
 import AdSlot from '../components/AdSlot.astro';
 import CompressTool from '../tools/CompressTool';
+import { ResizeTool, ConvertTool, CropTool, RotateTool, Base64Tool, PaletteTool, FilterTool } from '../tools/ImgTools';
 import { implementedTools, type Tool } from '../data/tools';
 import { site } from '../config';
 import { t } from '../i18n/en';
@@ -29,7 +30,14 @@ const schema = [
   <Breadcrumbs crumbs={[{ name: 'Home', href: '/' }, { name: tool.category }, { name: tool.name }]} />
   <h1>{tool.name}</h1>
   <p class="lead">{tool.intro}</p>
-  <CompressTool client:load />
+  {tool.component === 'CompressTool' && <CompressTool client:load />}
+  {tool.component === 'ResizeTool' && <ResizeTool client:load />}
+  {tool.component === 'ConvertTool' && <ConvertTool client:load />}
+  {tool.component === 'CropTool' && <CropTool client:load />}
+  {tool.component === 'RotateTool' && <RotateTool client:load />}
+  {tool.component === 'Base64Tool' && <Base64Tool client:load />}
+  {tool.component === 'PaletteTool' && <PaletteTool client:load />}
+  {tool.component === 'FilterTool' && <FilterTool client:load />}
   <AdSlot position="after-tool" />
   <h2>{t.tool.howTo}</h2>
   <ol>{tool.howTo.map((step) => <li>{step}</li>)}</ol>
